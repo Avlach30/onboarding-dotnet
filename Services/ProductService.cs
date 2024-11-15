@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using onboarding_dotnet.Dtos.Products;
 using onboarding_dotnet.Interfaces.Repositories;
 using onboarding_dotnet.Interfaces.Services;
+using onboarding_dotnet.Mappers;
 using onboarding_dotnet.Models;
 
 namespace onboarding_dotnet.Services;
@@ -28,16 +29,7 @@ public class ProductService(
     {
         await _categoryRepository.FindOne(data.CategoryId);
 
-        var product = new Product
-        {
-            CategoryId = data.CategoryId,
-            Name = data.Name,
-            Price = data.Price,
-            Stock = data.Stock,
-            Description = data.Description
-        };
-
-        return await _productRepository.CreateAsync(product);
+        return await _productRepository.CreateAsync(data.ToModel());
     }
 
     public async Task<AsyncVoidMethodBuilder> Update(int id, ProductRequestDto data)
