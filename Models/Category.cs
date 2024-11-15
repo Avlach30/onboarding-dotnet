@@ -9,4 +9,6 @@ public class Category : BaseModel
     
     [MaxLength(255)]
     public string? Description { get; set; }
+
+    public ICollection<Product> Products { get; } = [];
 }
