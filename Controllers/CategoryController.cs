@@ -23,7 +23,7 @@ public class CategoryController(ICategoryService categoryService) : Controller
         return Ok(IndexResponse<CategoryResponseDto>.Success(result, "Get categories success"));
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<ApiResponse<CategoryResponseDto>>> Show(int id)
     {
         var category = await _categoryService.GetOne(id);
@@ -39,7 +39,7 @@ public class CategoryController(ICategoryService categoryService) : Controller
         return Ok(ApiResponse.Success("Category created"));
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     public async Task<ActionResult<ApiResponse>> Update(int id, [FromBody] CategoryRequestDto categoryRequestDto)
     {
         await _categoryService.Update(id, categoryRequestDto);
@@ -47,7 +47,7 @@ public class CategoryController(ICategoryService categoryService) : Controller
         return Ok(ApiResponse.Success("Category updated"));
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     public async Task<ActionResult<ApiResponse>> Delete(int id)
     {
         await _categoryService.Delete(id);
