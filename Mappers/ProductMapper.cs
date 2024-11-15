@@ -36,7 +36,7 @@ public static class ProductMapper
         };
     }
 
-    public static Product ToModel(this ProductDto productDto)
+    public static Product ToModel(this ProductRequestDto productDto)
     {
         return new Product
         {
