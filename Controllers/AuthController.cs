@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using onboarding_dotnet.Dtos.Auth;
 using onboarding_dotnet.Dtos.Users;
 using onboarding_dotnet.Infrastructures.Responses;
 using onboarding_dotnet.Interfaces.Services;
@@ -17,5 +18,13 @@ public class AuthController(IAuthService authService) : Controller
         await _authService.RegisterAsync(registerRequestDto);
 
         return Ok(ApiResponse.Success("Register success"));
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult<ApiResponse<AuthLoginResponseDto>>> Login([FromBody] AuthLoginRequestDto loginRequestDto)
+    {
+        var response = await _authService.LoginAsync(loginRequestDto);
+
+        return Ok(ApiResponse<AuthLoginResponseDto>.Success(response, "Login success"));
     }
 }
