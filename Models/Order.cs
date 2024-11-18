@@ -6,7 +6,6 @@ namespace onboarding_dotnet.Models;
 
 public class Order: BaseModel
 {
-    [DefaultValue(OrderStatus.Draft)]
     public required string Status { get; set; }
 
 
