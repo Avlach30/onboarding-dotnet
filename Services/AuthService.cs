@@ -69,7 +69,7 @@ public class AuthService(IUserRepository userRepository, IConfiguration configur
             _config["Jwt:Issuer"],
             _config["Jwt:Audience"],
             userClaims,
-            expires: DateTime.Now.AddMinutes(_config.GetValue<int>("Jwt:ExpirationTime")),
+            expires: DateTime.Now.AddDays(_config.GetValue<int>("Jwt:ExpirationTimeInDays")),
             signingCredentials: credentials
         );
 
