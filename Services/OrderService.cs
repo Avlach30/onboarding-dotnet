@@ -1,5 +1,4 @@
 using System.Runtime.CompilerServices;
-using Microsoft.EntityFrameworkCore.Storage;
 using onboarding_dotnet.Dtos.Orders;
 using onboarding_dotnet.Infrastuctures.Database;
 using onboarding_dotnet.Interfaces.Repositories;
@@ -22,7 +21,7 @@ public class OrderService(
     public async Task<bool> CreateAsync(OrderRequestDto requestDto, int loggedUserId)
     {
         // Begin transaction
-        var transaction = _context.Database.BeginTransaction();
+        var dbTransaction = _context.Database.BeginTransaction();
 
         try
         {   
@@ -78,8 +77,20 @@ public class OrderService(
             await _context.OrderProducts.AddRangeAsync(orderProducts);
             await _context.SaveChangesAsync();
 
+            // Create transaction for the payment
+            var transaction = new Transaction
+            {
+                OrderId = order.Id,
+                PaymentMethod = requestDto.PaymentMethod,
+                PaymentStatus = PaymentStatus.Pending
+            };
+
+            // Add the transaction to the context
+            await _context.Transactions.AddAsync(transaction);
+            await _context.SaveChangesAsync();
+
             // Commit the transaction
-            transaction.Commit();
+            dbTransaction.Commit();
 
             return true;
         }
@@ -87,7 +98,7 @@ public class OrderService(
         catch (Exception ex)
         {
             // Rollback the transaction
-            transaction.Rollback();
+            dbTransaction.Rollback();
             throw new Exception(ex.Message);
         }
     }
