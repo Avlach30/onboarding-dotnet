@@ -1,10 +1,12 @@
+using onboarding_dotnet.Models;
+
 namespace onboarding_dotnet.Interfaces.Services
 {
-    public interface IUserService<TData>
+    public interface IUserService
     {
-        Task<TData> GetOneByEmail(string email);
+        Task<User> GetOneByEmail(string email);
 
-        Task<TData> GetOneById(int id);
+        Task<User> GetOneById(int id);
     }
     
 }

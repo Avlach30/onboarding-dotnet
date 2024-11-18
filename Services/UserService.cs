@@ -4,7 +4,7 @@ using onboarding_dotnet.Models;
 
 namespace onboarding_dotnet.Services;
 
-public class UserService(IUserRepository userRepository): IUserService<User>
+public class UserService(IUserRepository userRepository): IUserService
 {
     private readonly IUserRepository _userRepository = userRepository;
 

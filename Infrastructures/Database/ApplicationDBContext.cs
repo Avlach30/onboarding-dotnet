@@ -12,6 +12,12 @@ namespace onboarding_dotnet.Infrastuctures.Database
 
         public required DbSet<User> Users { get; set; }
 
+        public required DbSet<Order> Orders { get; set; }
+
+        public required DbSet<OrderProduct> OrderProducts { get; set; }
+
+        public required DbSet<Transaction> Transactions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

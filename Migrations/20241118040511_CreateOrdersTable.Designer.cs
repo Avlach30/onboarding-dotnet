@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using onboarding_dotnet.Infrastuctures.Database;
 
@@ -11,9 +12,11 @@ using onboarding_dotnet.Infrastuctures.Database;
 namespace onboarding_dotnet.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241118040511_CreateOrdersTable")]
+    partial class CreateOrdersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,43 +92,6 @@ namespace onboarding_dotnet.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("onboarding_dotnet.Models.OrderProduct", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Created_at")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Deleted_at")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int")
-                        .HasColumnName("Order_Id");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int")
-                        .HasColumnName("Product_Id");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Updated_at")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Order_Products");
-                });
-
             modelBuilder.Entity("onboarding_dotnet.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -166,45 +132,6 @@ namespace onboarding_dotnet.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("onboarding_dotnet.Models.Transaction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Created_at")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Deleted_at")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int")
-                        .HasColumnName("order_id");
-
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("payment_method");
-
-                    b.Property<string>("PaymentStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("payment_status");
-
-                    b.Property<DateTime>("Updated_at")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId")
-                        .IsUnique();
-
-                    b.ToTable("transactions");
                 });
 
             modelBuilder.Entity("onboarding_dotnet.Models.User", b =>
@@ -260,25 +187,6 @@ namespace onboarding_dotnet.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("onboarding_dotnet.Models.OrderProduct", b =>
-                {
-                    b.HasOne("onboarding_dotnet.Models.Order", "Order")
-                        .WithMany("OrderProducts")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("onboarding_dotnet.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("onboarding_dotnet.Models.Product", b =>
                 {
                     b.HasOne("onboarding_dotnet.Models.Category", "Category")
@@ -290,27 +198,9 @@ namespace onboarding_dotnet.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("onboarding_dotnet.Models.Transaction", b =>
-                {
-                    b.HasOne("onboarding_dotnet.Models.Order", "Order")
-                        .WithOne("transaction")
-                        .HasForeignKey("onboarding_dotnet.Models.Transaction", "OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-                });
-
             modelBuilder.Entity("onboarding_dotnet.Models.Category", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("onboarding_dotnet.Models.Order", b =>
-                {
-                    b.Navigation("OrderProducts");
-
-                    b.Navigation("transaction");
                 });
 
             modelBuilder.Entity("onboarding_dotnet.Models.User", b =>
