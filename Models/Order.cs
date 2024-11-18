@@ -18,4 +18,6 @@ public class Order: BaseModel
     public User User { get; set; } = null!;
 
     public ICollection<OrderProduct> OrderProducts { get; } = [];
+
+    public Transaction? transaction { get; set; }
 }
