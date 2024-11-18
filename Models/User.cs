@@ -15,4 +15,6 @@ public class User: BaseModel
 
     [MaxLength(100)]
     public required string Password { get; set; }
+
+    public ICollection<Order> Orders { get; } = [];
 }
