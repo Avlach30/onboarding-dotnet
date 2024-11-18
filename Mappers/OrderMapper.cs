@@ -28,6 +28,7 @@ public static class OrderMapper
             TotalPrice = order.TotalPrice,
             User = order.User?.ToResponse() ?? null,
             OrderProducts = order.OrderProducts?.Select(orderProduct => orderProduct.ToResponse()).ToList() ?? [],
+            Transaction = order.Transaction?.ToResponse() ?? null,
             CreatedAt = order.Created_at,
             UpdatedAt = order.Updated_at
         };

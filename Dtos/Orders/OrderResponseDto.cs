@@ -1,4 +1,5 @@
 using onboarding_dotnet.Dtos.OrderProducts;
+using onboarding_dotnet.Dtos.Transactions;
 using onboarding_dotnet.Dtos.Users;
 
 namespace onboarding_dotnet.Dtos.Orders;
@@ -18,4 +19,6 @@ public class OrderResponseDto
     public DateTime UpdatedAt { get; set; }
 
     public List<OrderProductResponseDto> OrderProducts { get; set; } = [];
+
+    public TransactionResponseDto? Transaction { get; set; }
 }
