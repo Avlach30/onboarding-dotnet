@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using onboarding_dotnet.Infrastuctures.Database;
 using onboarding_dotnet.Interfaces.Repositories;
 using onboarding_dotnet.Interfaces.Services;
+using onboarding_dotnet.Models;
 using onboarding_dotnet.Repositories;
 using onboarding_dotnet.Services;
 
@@ -15,6 +16,7 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 
 // Add services to the container.
 
+// Add JWT authentication middleware
 builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -49,6 +51,7 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService<User>, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
