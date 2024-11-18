@@ -11,12 +11,12 @@ namespace onboarding_dotnet.Services;
 public class OrderService(
     ApplicationDBContext context,
     IProductRepository productRepository,
-    IUserRepository userRepository
+    IOrderRepository orderRepository
 ): IOrderService
 {
-    private readonly IUserRepository _userRepository = userRepository;
-    private readonly IProductRepository _productRepository = productRepository;
     private readonly ApplicationDBContext _context = context;
+    private readonly IProductRepository _productRepository = productRepository;
+    private readonly IOrderRepository _orderRepository = orderRepository;
 
     public async Task<bool> CreateAsync(OrderRequestDto requestDto, int loggedUserId)
     {
@@ -101,6 +101,13 @@ public class OrderService(
             dbTransaction.Rollback();
             throw new Exception(ex.Message);
         }
+    }
+
+    public async Task<Order> GetOne(int id, bool withRelations = false)
+    {
+        var data = withRelations ? await _orderRepository.FindOneWithRelations(id) : await _orderRepository.FindOneWithoutRelations(id);
+
+        return data;
     }
 
     public async Task<AsyncVoidMethodBuilder> UpdateOrderStatus(int orderId, string status)
