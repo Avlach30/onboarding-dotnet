@@ -19,5 +19,5 @@ public class Order: BaseModel
 
     public ICollection<OrderProduct> OrderProducts { get; } = [];
 
-    public Transaction? transaction { get; set; }
+    public Transaction? Transaction { get; set; }
 }
