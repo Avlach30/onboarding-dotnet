@@ -12,9 +12,9 @@ namespace onboarding_dotnet.Controllers;
 
 [ApiController]
 [Route("users")]
-public class UserController(IUserService<User> userService): Controller
+public class UserController(IUserService userService): Controller
 {
-    private readonly IUserService<User> _userService = userService;
+    private readonly IUserService _userService = userService;
 
     [HttpGet("profile")]
     [Authorize]
