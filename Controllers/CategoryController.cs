@@ -1,26 +1,31 @@
 using Microsoft.AspNetCore.Mvc;
 using onboarding_dotnet.Dtos.Categories;
+using onboarding_dotnet.Dtos.Index;
 using onboarding_dotnet.Infrastructures.Responses;
-using onboarding_dotnet.Interfaces.Repositories;
 using onboarding_dotnet.Interfaces.Services;
+using onboarding_dotnet.Interfaces.Services.Indexes;
 using onboarding_dotnet.Mappers;
 
 namespace onboarding_dotnet.Controllers;
 
 [ApiController]
 [Route("categories")]
-public class CategoryController(ICategoryService categoryService) : Controller
+public class CategoryController(
+    ICategoryService categoryService,
+    ICategoryIndexService categoryIndexService
+) : Controller
 {
     private readonly ICategoryService _categoryService = categoryService;
+    private readonly ICategoryIndexService _categoryIndexService = categoryIndexService;
 
     [HttpGet]
-    public async Task<ActionResult<IndexResponse<CategoryResponseDto>>> Index()
+    public async Task<ActionResult<IndexResponse<CategoryResponseDto>>> Index(
+        [FromQuery] IndexRequestDto request
+    )
     {
-        var categories = await _categoryService.GetAll();
+        var result = await _categoryIndexService.Fetch(request);
 
-        var result = categories.Select(category => category.ToResponse()).ToList();
-
-        return Ok(IndexResponse<CategoryResponseDto>.Success(result, "Get categories success"));
+        return Ok(result);
     }
 
     [HttpGet("{id:int}")]
