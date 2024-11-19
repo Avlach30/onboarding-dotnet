@@ -114,6 +114,28 @@ public class OrderService(
     {
         var order = _context.Orders.Find(orderId) ?? throw new Exception("Order not found.");
 
+        // Check if order status is already the same
+        if (order.Status == status)
+        {
+            throw new Exception("Order status is already " + status);
+        }
+
+        /**
+         * Check if the status is valid
+         * 
+         * Shipped status can only be set if the order status is Processed
+         * or if the order status is already Shipped, the status can only be set to Completed
+         */
+        if (status == OrderStatus.Shipped && order.Status != OrderStatus.Processed)
+        {
+            throw new Exception("Order status is not processed.");
+        }
+
+        if (status == OrderStatus.Completed && order.Status != OrderStatus.Shipped)
+        {
+            throw new Exception("Order status is not shipped.");
+        }
+
         order.Status = status;
 
         _context.Orders.Update(order);
