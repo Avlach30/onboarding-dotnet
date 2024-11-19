@@ -6,7 +6,7 @@ public class ContainsStringsAttribute(string[] validStrings) : ValidationAttribu
 {
     private readonly string[] _validStrings = validStrings;
 
-    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {   
         // Check if all elements are strings
         if (value is string strValue)

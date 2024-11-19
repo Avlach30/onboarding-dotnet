@@ -1,9 +1,11 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using onboarding_dotnet.Dtos.Index;
 using onboarding_dotnet.Dtos.Orders;
 using onboarding_dotnet.Infrastructures.Responses;
 using onboarding_dotnet.Interfaces.Services;
+using onboarding_dotnet.Interfaces.Services.Indexes;
 using onboarding_dotnet.Mappers;
 using onboarding_dotnet.Utils.Enums;
 
@@ -11,9 +13,24 @@ namespace onboarding_dotnet.Controllers;
 
 [ApiController]
 [Route("orders")]
-public class OrderController(IOrderService orderService): Controller
+public class OrderController(
+    IOrderService orderService,
+    IOrderIndexService orderIndexService
+): Controller
 {
     private readonly IOrderService _orderService = orderService;
+    private readonly IOrderIndexService _orderIndexService = orderIndexService;
+
+    [HttpGet]
+    [Authorize]
+    public async Task<ActionResult<IndexResponse<OrderResponseDto>>> Index(
+        [FromQuery] IndexRequestDto request
+    )
+    {
+        var result = await _orderIndexService.Fetch(request);
+
+        return Ok(result);
+    }
 
     [HttpPost]
     [Authorize]
