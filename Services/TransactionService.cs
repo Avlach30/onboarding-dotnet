@@ -46,7 +46,7 @@ public class TransactionService(
             // Commit the transaction   
             dbTransaction.Commit();
 
-            _logger.LogInformation("Payment status updated to success");
+            _logger.LogInformation("Transaction with id {transactionId} has been updated to success.", transactionId);
 
             return true;
         }

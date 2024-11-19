@@ -146,7 +146,7 @@ public class OrderService(
         _context.Orders.Update(order);
         await _context.SaveChangesAsync();
 
-        _logger.LogInformation("Order status updated to {status} successfully.", status);
+        _logger.LogInformation("Order with id {orderId} updated to {status} successfully.", orderId, status);
 
         return AsyncVoidMethodBuilder.Create();
     }
