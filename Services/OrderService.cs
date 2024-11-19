@@ -11,12 +11,15 @@ namespace onboarding_dotnet.Services;
 public class OrderService(
     ApplicationDBContext context,
     IProductRepository productRepository,
-    IOrderRepository orderRepository
+    IOrderRepository orderRepository,
+    ILogger<OrderService> logger
 ): IOrderService
 {
     private readonly ApplicationDBContext _context = context;
     private readonly IProductRepository _productRepository = productRepository;
     private readonly IOrderRepository _orderRepository = orderRepository;
+
+    private readonly ILogger<OrderService> _logger = logger;
 
     public async Task<bool> CreateAsync(OrderRequestDto requestDto, int loggedUserId)
     {
@@ -92,6 +95,8 @@ public class OrderService(
             // Commit the transaction
             dbTransaction.Commit();
 
+            _logger.LogInformation("Order created successfully.");
+
             return true;
         }
 
@@ -140,6 +145,8 @@ public class OrderService(
 
         _context.Orders.Update(order);
         await _context.SaveChangesAsync();
+
+        _logger.LogInformation("Order status updated to {status} successfully.", status);
 
         return AsyncVoidMethodBuilder.Create();
     }
