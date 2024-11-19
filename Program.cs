@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using onboarding_dotnet.Infrastuctures.Database;
 using onboarding_dotnet.Interfaces.Repositories;
 using onboarding_dotnet.Interfaces.Services;
+using onboarding_dotnet.Interfaces.Services.Indexes;
 using onboarding_dotnet.Repositories;
 using onboarding_dotnet.Services;
 
@@ -57,6 +58,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductIndexService, ProductIndexService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
