@@ -8,11 +8,14 @@ namespace onboarding_dotnet.Services;
 
 public class TransactionService(
     ApplicationDBContext context,
-    ITransactionRepository transactionRepository
+    ITransactionRepository transactionRepository,
+    ILogger<TransactionService> logger
 ): ITransactionService
 {
     private readonly ApplicationDBContext _context = context;
     private readonly ITransactionRepository _transactionRepository = transactionRepository;
+
+    private readonly ILogger<TransactionService> _logger = logger;
 
     public async Task<bool> UpdatePaymentStatusToSuccess(int transactionId)
     {
@@ -42,6 +45,8 @@ public class TransactionService(
 
             // Commit the transaction   
             dbTransaction.Commit();
+
+            _logger.LogInformation("Transaction with id {transactionId} has been updated to success.", transactionId);
 
             return true;
         }
