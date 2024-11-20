@@ -13,6 +13,8 @@ public class TransactionRepository(ApplicationDBContext context): ITransactionRe
     {
         return await _context.Transactions
             .Include(transaction => transaction.Order)
+            .ThenInclude(order => order.User)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(transaction => transaction.Id == id) 
             ?? throw new Exception("Transaction not found");
     }
