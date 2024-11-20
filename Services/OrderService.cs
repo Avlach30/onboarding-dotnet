@@ -1,5 +1,8 @@
 using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 using onboarding_dotnet.Dtos.Orders;
+using onboarding_dotnet.Infrastructures.Mails.Classes;
+using onboarding_dotnet.Infrastructures.Mails.Interfaces;
 using onboarding_dotnet.Infrastuctures.Database;
 using onboarding_dotnet.Interfaces.Repositories;
 using onboarding_dotnet.Interfaces.Services;
@@ -12,14 +15,17 @@ public class OrderService(
     ApplicationDBContext context,
     IProductRepository productRepository,
     IOrderRepository orderRepository,
-    ILogger<OrderService> logger
+    ILogger<OrderService> logger,
+    IEmailService emailService,
+    IUserRepository userRepository
 ): IOrderService
 {
     private readonly ApplicationDBContext _context = context;
     private readonly IProductRepository _productRepository = productRepository;
     private readonly IOrderRepository _orderRepository = orderRepository;
-
     private readonly ILogger<OrderService> _logger = logger;
+    private readonly IEmailService _emailService = emailService;
+    private readonly IUserRepository _userRepository = userRepository;
 
     public async Task<bool> CreateAsync(OrderRequestDto requestDto, int loggedUserId)
     {
@@ -28,6 +34,8 @@ public class OrderService(
 
         try
         {   
+            var loggedUser = await _userRepository.FindByIdAsync(loggedUserId) ?? throw new Exception("User not found.");
+
             // Initialize the total price
             decimal totalPrice = 0;
 
@@ -95,7 +103,23 @@ public class OrderService(
             // Commit the transaction
             dbTransaction.Commit();
 
+            // Log the success
             _logger.LogInformation("Order created successfully.");
+
+            
+            // Send email to the related user
+            EmailMetadata emailMetadata = new(
+                loggedUser.Email,
+                "New Order Created",
+                "Dear @Model.Name, your order has been created successfully."
+            );
+
+            EmailTemplateModel emailTemplateModel = new(
+                loggedUser.Name,
+                loggedUser.Email
+            );
+
+            await _emailService.SendUsingTemplate(emailMetadata, emailTemplateModel);
 
             return true;
         }
@@ -117,7 +141,10 @@ public class OrderService(
 
     public async Task<AsyncVoidMethodBuilder> UpdateOrderStatus(int orderId, string status)
     {
-        var order = _context.Orders.Find(orderId) ?? throw new Exception("Order not found.");
+        var order = _context.Orders
+            .Include(order => order.User)
+            .AsSplitQuery()
+            .FirstOrDefault(order => order.Id == orderId) ?? throw new Exception("Order not found.");
 
         // Check if order status is already the same
         if (order.Status == status)
@@ -146,7 +173,22 @@ public class OrderService(
         _context.Orders.Update(order);
         await _context.SaveChangesAsync();
 
+        // Log the success
         _logger.LogInformation("Order with id {orderId} updated to {status} successfully.", orderId, status);
+
+        // Send email to the related user
+        EmailMetadata emailMetadata = new(
+            order.User.Email,
+            "Order Updated",
+            "Dear @Model.Name, your order has been updated successfully to " + status + "."
+        );
+
+        EmailTemplateModel emailTemplateModel = new(    
+            order.User.Name,
+            order.User.Email
+        );
+
+        await _emailService.SendUsingTemplate(emailMetadata, emailTemplateModel);
 
         return AsyncVoidMethodBuilder.Create();
     }

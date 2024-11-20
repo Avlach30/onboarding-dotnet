@@ -1,11 +1,14 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using onboarding_dotnet.Infrastructures.Mails.Interfaces;
+using onboarding_dotnet.Infrastructures.Mails.Services;
 using onboarding_dotnet.Infrastuctures.Database;
 using onboarding_dotnet.Interfaces.Repositories;
 using onboarding_dotnet.Interfaces.Services;
 using onboarding_dotnet.Interfaces.Services.Indexes;
 using onboarding_dotnet.Repositories;
 using onboarding_dotnet.Services;
+using onboarding_dotnet.Utils.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +55,9 @@ builder.Logging.AddFilter("onboarding_dotnet", LogLevel.Trace);
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
+builder.Services.AddFluentEMail(builder.Configuration);
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
