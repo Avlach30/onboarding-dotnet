@@ -30,7 +30,7 @@ public class OrderService(
     public async Task<bool> CreateAsync(OrderRequestDto requestDto, int loggedUserId)
     {
         // Begin transaction
-        var dbTransaction = _context.Database.BeginTransaction();
+        var dbTransaction = await _context.Database.BeginTransactionAsync();
 
         try
         {   
@@ -101,7 +101,7 @@ public class OrderService(
             await _context.SaveChangesAsync();
 
             // Commit the transaction
-            dbTransaction.Commit();
+            await dbTransaction.CommitAsync();
 
             // Log the success
             _logger.LogInformation("Order created successfully.");
@@ -119,7 +119,11 @@ public class OrderService(
                 loggedUser.Email
             );
 
-            await _emailService.SendUsingTemplate(emailMetadata, emailTemplateModel);
+            // Send the email in a separate thread for performance
+            _ = Task.Run(async () =>
+            {
+                await _emailService.SendUsingTemplate(emailMetadata, emailTemplateModel);
+            });
 
             return true;
         }
@@ -127,7 +131,7 @@ public class OrderService(
         catch (Exception ex)
         {
             // Rollback the transaction
-            dbTransaction.Rollback();
+            await dbTransaction.RollbackAsync();
             throw new Exception(ex.Message);
         }
     }
@@ -188,7 +192,11 @@ public class OrderService(
             order.User.Email
         );
 
-        await _emailService.SendUsingTemplate(emailMetadata, emailTemplateModel);
+        // Send the email in a separate thread for performance
+        _ = Task.Run(async () =>
+        {
+            await _emailService.SendUsingTemplate(emailMetadata, emailTemplateModel);
+        });
 
         return AsyncVoidMethodBuilder.Create();
     }
