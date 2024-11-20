@@ -23,7 +23,7 @@ public class TransactionService(
     public async Task<bool> UpdatePaymentStatusToSuccess(int transactionId)
     {
         // Begin transaction
-        var dbTransaction = _context.Database.BeginTransaction();
+        var dbTransaction = await _context.Database.BeginTransactionAsync();
 
         try
         {
@@ -47,7 +47,7 @@ public class TransactionService(
             await _context.SaveChangesAsync();
 
             // Commit the transaction   
-            dbTransaction.Commit();
+            await dbTransaction.CommitAsync();
 
             // Log the success message
             _logger.LogInformation("Transaction with id {transactionId} has been updated to success.", transactionId);
@@ -64,14 +64,18 @@ public class TransactionService(
                 transaction.Order.User.Email
             );
 
-            await _emailService.SendUsingTemplate(emailMetadata, emailTemplateModel);
+            // Send the email in a separate thread for performance
+            _ = Task.Run(async () =>
+            {
+                await _emailService.SendUsingTemplate(emailMetadata, emailTemplateModel);;
+            });
 
             return true;
         }
         catch (Exception ex)
         {
             // Rollback the transaction
-            dbTransaction.Rollback();
+            await dbTransaction.RollbackAsync();
             throw new Exception(ex.Message);
         }
     }
