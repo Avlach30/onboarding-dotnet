@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using onboarding_dotnet.Infrastructures.Mails.Interfaces;
 using onboarding_dotnet.Infrastructures.Mails.Services;
 using onboarding_dotnet.Infrastructures.Policies;
+using onboarding_dotnet.Infrastructures.Schedulers;
 using onboarding_dotnet.Infrastuctures.Database;
 using onboarding_dotnet.Interfaces.Repositories;
 using onboarding_dotnet.Interfaces.Services;
@@ -11,6 +12,7 @@ using onboarding_dotnet.Middlewares;
 using onboarding_dotnet.Repositories;
 using onboarding_dotnet.Services;
 using onboarding_dotnet.Utils.Extensions;
+using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +21,10 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
 
-// Add services to the container.
+// Add Quartz for scheduling jobs
+builder.Services.AddQuartz();
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+builder.Services.AddSingleton<IJob, OrderAutoCancelJob>();
 
 // Add JWT authentication middleware
 builder.Services.AddAuthentication(options => {
@@ -86,6 +91,23 @@ builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 var app = builder.Build();
+
+var schedulerFactory = app.Services.GetRequiredService<ISchedulerFactory>();
+var scheduler = await schedulerFactory.GetScheduler();
+await scheduler.Start();
+
+var jobDetail = JobBuilder.Create<OrderAutoCancelJob>()
+    .WithIdentity("orderAutoCancelJob")
+    .Build();
+
+// Run the job every 1 minute
+var trigger = TriggerBuilder.Create()
+    .WithIdentity("orderAutoCancelJobTrigger")
+    .StartNow()
+    .WithSimpleSchedule(x => x.WithIntervalInMinutes(1).RepeatForever())
+    .Build();
+
+await scheduler.ScheduleJob(jobDetail, trigger);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
