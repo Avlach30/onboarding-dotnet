@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace onboarding_dotnet.Models;
 
+[Table("categories")]
 public class Category : BaseModel
 {
     [MaxLength(100)]

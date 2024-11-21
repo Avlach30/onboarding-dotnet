@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace onboarding_dotnet.Models;
 
+[Table("users")]
 public class User: BaseModel
 {
     [MaxLength(100)]

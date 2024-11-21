@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace onboarding_dotnet.Models;
 
+[Table("products")]
 public class Product: BaseModel
 {
     [MaxLength(100)]

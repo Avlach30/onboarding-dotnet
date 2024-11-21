@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace onboarding_dotnet.Models;
 
-[Table("Order_Products")]
+[Table("order_products")]
 public class OrderProduct: BaseModel
 {
     [Column("Order_Id")]

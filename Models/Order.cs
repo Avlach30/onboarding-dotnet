@@ -1,9 +1,8 @@
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
-using onboarding_dotnet.Utils.Enums;
 
 namespace onboarding_dotnet.Models;
 
+[Table("orders")]
 public class Order: BaseModel
 {
     public required string Status { get; set; }
