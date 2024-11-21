@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using onboarding_dotnet.Infrastructures.Mails.Interfaces;
 using onboarding_dotnet.Infrastructures.Mails.Services;
+using onboarding_dotnet.Infrastructures.Policies;
 using onboarding_dotnet.Infrastuctures.Database;
 using onboarding_dotnet.Interfaces.Repositories;
 using onboarding_dotnet.Interfaces.Services;
 using onboarding_dotnet.Interfaces.Services.Indexes;
+using onboarding_dotnet.Middlewares;
 using onboarding_dotnet.Repositories;
 using onboarding_dotnet.Services;
 using onboarding_dotnet.Utils.Extensions;
@@ -38,7 +40,12 @@ builder.Services.AddAuthentication(options => {
     }
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy();
+        options.JsonSerializerOptions.DictionaryKeyPolicy = new SnakeCaseNamingPolicy();
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -94,6 +101,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ValidateJsonKeysMiddleware>();
 
 app.MapControllers();
 
