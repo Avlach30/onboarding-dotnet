@@ -4,14 +4,15 @@ namespace onboarding_dotnet.Models;
 
 [Table("orders")]
 public class Order: BaseModel
-{
+{   
+    [Column("status")]
     public required string Status { get; set; }
 
 
-    [Column("Total_Price", TypeName = "decimal(12,2)")]
+    [Column("total_price", TypeName = "decimal(12,2)")]
     public decimal TotalPrice { get; set; }
 
-    [Column("User_Id")]
+    [Column("user_id")]
     public int UserId { get; set; }
 
     public User User { get; set; } = null!;
