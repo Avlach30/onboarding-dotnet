@@ -19,7 +19,7 @@ public class ProductController(
     private readonly IProductIndexService _productIndexService = productIndexService;
 
     [HttpGet]
-    public async Task<ActionResult<IndexResponse<ProductResponseDto>>> Index(
+    public async Task<ActionResult<IndexResponse<ProductDto>>> Index(
         [FromQuery] IndexRequestDto request
     )
     {

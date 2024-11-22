@@ -15,9 +15,9 @@ public class OrderIndexService(
 {
     private readonly ApplicationDBContext _context = context;
 
-    public async Task<IndexResponse<OrderResponseDto>> Fetch(IndexRequestDto request)
+    public async Task<IndexResponse<OrderDto>> Fetch(IndexRequestDto request)
     {
-        var datas = _context.Orders.Include(order => order.Transaction).AsSplitQuery().AsQueryable();
+        var datas = _context.Orders.Include(order => order.User).AsSplitQuery().AsQueryable();
 
         // Default order by created_at desc
         if (string.IsNullOrEmpty(request.OrderBy))
@@ -37,8 +37,8 @@ public class OrderIndexService(
 
         var result = await datas.ToListAsync();
 
-        return IndexResponse<OrderResponseDto>.Success(
-            result.Select(order => order.ToResponse()).ToList(),
+        return IndexResponse<OrderDto>.Success(
+            result.Select(order => order.ToDto()).ToList(),
             totalData,
             "Get orders success", 
             request.Page, 

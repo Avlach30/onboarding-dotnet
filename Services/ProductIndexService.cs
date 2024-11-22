@@ -16,7 +16,7 @@ public class ProductIndexService(
 {
     private readonly ApplicationDBContext _context = context;
 
-    public async Task<IndexResponse<ProductResponseDto>> Fetch(IndexRequestDto request)
+    public async Task<IndexResponse<ProductDto>> Fetch(IndexRequestDto request)
     {
         var datas = _context.Products.Include(product => product.Category).AsSplitQuery().AsQueryable();
 
@@ -38,8 +38,8 @@ public class ProductIndexService(
 
         var result = await datas.ToListAsync();
 
-        return IndexResponse<ProductResponseDto>.Success(
-            result.Select(product => product.ToResponse()).ToList(),
+        return IndexResponse<ProductDto>.Success(
+            result.Select(product => product.ToDto()).ToList(),
             totalData,
             "Get products success", 
             request.Page, 

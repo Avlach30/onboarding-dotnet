@@ -19,7 +19,7 @@ public class CategoryController(
     private readonly ICategoryIndexService _categoryIndexService = categoryIndexService;
 
     [HttpGet]
-    public async Task<ActionResult<IndexResponse<CategoryResponseDto>>> Index(
+    public async Task<ActionResult<IndexResponse<CategoryDto>>> Index(
         [FromQuery] IndexRequestDto request
     )
     {
