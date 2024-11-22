@@ -14,7 +14,7 @@ public class CategoryRepository(ApplicationDBContext context)
 {
     private readonly ApplicationDBContext _context = context;
 
-    public async Task<IndexResponse<CategoryDto>> FindAllForIndex(IndexRequestDto request)
+    public async Task<IndexResponse<CategoryDto>> FindAllForIndex(IndexCategoryRequestDto request)
     {
         var datas = _context.Categories.AsQueryable();
 
