@@ -10,19 +10,17 @@ namespace onboarding_dotnet.Controllers;
 [ApiController]
 [Route("categories")]
 public class CategoryController(
-    CategoryService categoryService,
-    CategoryIndexService categoryIndexService
+    CategoryService categoryService
 ) : Controller
 {
     private readonly CategoryService _categoryService = categoryService;
-    private readonly CategoryIndexService _categoryIndexService = categoryIndexService;
 
     [HttpGet]
     public async Task<ActionResult<IndexResponse<CategoryDto>>> Index(
         [FromQuery] IndexRequestDto request
     )
     {
-        var result = await _categoryIndexService.Fetch(request);
+        var result = await _categoryService.GetAllForIndexPage(request);
 
         return Ok(result);
     }

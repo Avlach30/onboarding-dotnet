@@ -1,5 +1,7 @@
 using System.Runtime.CompilerServices;
+using onboarding_dotnet.Dtos.Index;
 using onboarding_dotnet.Dtos.Products;
+using onboarding_dotnet.Infrastructures.Responses;
 using onboarding_dotnet.Mappers;
 using onboarding_dotnet.Models;
 using onboarding_dotnet.Repositories;
@@ -9,6 +11,11 @@ namespace onboarding_dotnet.Services;
 public class ProductService(ProductRepository productRepository)
 {
     private readonly ProductRepository _productRepository = productRepository;
+
+    public async Task<IndexResponse<ProductDto>> GetAllForIndexPage(IndexRequestDto request)
+    {
+        return await _productRepository.FindAllForIndex(request);
+    }
 
     public async Task<List<Product>> GetAll()
     {
