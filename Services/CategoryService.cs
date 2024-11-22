@@ -1,5 +1,7 @@
 using System.Runtime.CompilerServices;
 using onboarding_dotnet.Dtos.Categories;
+using onboarding_dotnet.Dtos.Index;
+using onboarding_dotnet.Infrastructures.Responses;
 using onboarding_dotnet.Mappers;
 using onboarding_dotnet.Models;
 using onboarding_dotnet.Repositories;
@@ -10,9 +12,9 @@ public class CategoryService(CategoryRepository categoryRepository)
 {
     private readonly CategoryRepository _categoryRepository = categoryRepository;
 
-    public async Task<List<Category>> GetAll()
+    public async Task<IndexResponse<CategoryDto>> GetAllForIndexPage(IndexRequestDto requestDto)
     {
-        return await _categoryRepository.FindAll();
+        return await _categoryRepository.FindAllForIndex(requestDto);
     }
 
     public async Task<Category> GetOne(int id)
