@@ -21,7 +21,7 @@ public class OrderController(
     [HttpGet]
     [Authorize]
     public async Task<ActionResult<IndexResponse<OrderDto>>> Index(
-        [FromQuery] IndexRequestDto request
+        [FromQuery] IndexOrderRequestDto request
     )
     {
         var result = await _orderService.GetAllForIndexPage(request);

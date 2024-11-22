@@ -13,7 +13,7 @@ public class OrderRepository(ApplicationDBContext context)
 {
     private readonly ApplicationDBContext _context = context;
 
-    public async Task<IndexResponse<OrderDto>> FindAllForIndex(IndexRequestDto request)
+    public async Task<IndexResponse<OrderDto>> FindAllForIndex(IndexOrderRequestDto request)
     {
         var datas = _context.Orders.Include(order => order.User).AsSplitQuery().AsQueryable();
 
@@ -21,6 +21,18 @@ public class OrderRepository(ApplicationDBContext context)
         if (string.IsNullOrEmpty(request.OrderBy))
         {
             datas = datas.OrderByDescending(order => order.Created_at);
+        }
+
+        // Implement filter total price
+        if (request.TotalPriceMin > 0 && request.TotalPriceMax > 0)
+        {
+            datas = datas.Where(order => order.TotalPrice >= request.TotalPriceMin && order.TotalPrice <= request.TotalPriceMax);
+        } else if (request.TotalPriceMin > 0)
+        {
+            datas = datas.Where(order => order.TotalPrice >= request.TotalPriceMin);
+        } else if (request.TotalPriceMax > 0)
+        {
+            datas = datas.Where(order => order.TotalPrice <= request.TotalPriceMax);
         }
 
         int totalData = await datas.CountAsync();
