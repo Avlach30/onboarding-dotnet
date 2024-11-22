@@ -68,7 +68,7 @@ namespace onboarding_dotnet.Providers
             builder.Logging.AddFilter("System", LogLevel.Warning);
             builder.Logging.AddFilter("onboarding_dotnet", LogLevel.Trace);
 
-            builder.Services.AddDbContext<ApplicationDBContext>(options =>
+            builder.Services.AddDbContextPool<ApplicationDBContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
             );
 
