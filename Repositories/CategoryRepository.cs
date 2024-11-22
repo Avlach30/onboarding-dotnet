@@ -24,6 +24,12 @@ public class CategoryRepository(ApplicationDBContext context)
             datas = datas.OrderByDescending(category => category.Created_at);
         }
 
+        // Implement search
+        if (!string.IsNullOrEmpty(request.Search))
+        {
+            datas = datas.Where(category => category.Name.Contains(request.Search));
+        }
+
         int totalData = await datas.CountAsync();
 
         // Implement pagination
