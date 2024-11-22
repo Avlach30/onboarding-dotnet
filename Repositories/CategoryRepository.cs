@@ -29,21 +29,17 @@ public class CategoryRepository(ApplicationDBContext context)
         return AsyncVoidMethodBuilder.Create();
     }
 
-    public async Task<AsyncVoidMethodBuilder> UpdateAsync(Category data)
+    public async Task<int> UpdateAsync(Category data)
     {
         _context.Categories.Update(data);
-        await _context.SaveChangesAsync();
-
-        return AsyncVoidMethodBuilder.Create();
+        return await _context.SaveChangesAsync();
     }
 
-    public Task<bool> Delete(int id)
+    public Task<int> Delete(int id)
     {
-        var data = FindOne(id).Result;
+        Category category = new() { Id = id };
 
-        _context.Categories.Remove(data);
-        _context.SaveChanges();
-
-        return Task.FromResult(true);
+        _context.Categories.Remove(category);
+        return _context.SaveChangesAsync();
     }
 }

@@ -15,9 +15,9 @@ public class Order: BaseModel
     [Column("user_id")]
     public int UserId { get; set; }
 
-    public User User { get; set; } = null!;
+    public virtual User User { get; set; } = null!;
 
-    public ICollection<OrderProduct> OrderProducts { get; } = [];
+    public virtual ICollection<OrderProduct> OrderProducts { get; } = [];
 
-    public Transaction? Transaction { get; set; }
+    public virtual Transaction? Transaction { get; set; }
 }

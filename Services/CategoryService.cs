@@ -25,20 +25,16 @@ public class CategoryService(CategoryRepository categoryRepository)
         return await _categoryRepository.CreateAsync(data.ToModel());
     }
 
-    public async Task<AsyncVoidMethodBuilder> Update(int id, CategoryRequestDto data)
+    public async Task<int> Update(int id, CategoryRequestDto data)
     {
-        var category = await _categoryRepository.FindOne(id);
+        var updatedData = data.ToModel();
+        updatedData.Id = id;
 
-        category.Name = data.Name;
-        category.Description = data.Description;
-
-        return await _categoryRepository.UpdateAsync(category);
+        return await _categoryRepository.UpdateAsync(updatedData);
     }
 
-    public async Task<bool> Delete(int id)
+    public async Task<int> Delete(int id)
     {
-        await _categoryRepository.FindOne(id);
-
         return await _categoryRepository.Delete(id);
     }
 }

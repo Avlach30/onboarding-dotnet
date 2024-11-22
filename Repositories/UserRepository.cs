@@ -9,6 +9,11 @@ public class UserRepository(ApplicationDBContext context)
 {
     private readonly ApplicationDBContext _context = context;
 
+    public async Task<bool> ExistsByEmailAsync(string email)
+    {
+        return await _context.Users.AnyAsync(user => user.Email == email);
+    }
+
     public async Task<User?> FindByEmailAsync(string email)
     {
         return await _context.Users.FirstOrDefaultAsync(user => user.Email == email);

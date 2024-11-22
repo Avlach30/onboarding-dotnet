@@ -19,8 +19,8 @@ public class AuthService(UserRepository userRepository, IConfiguration configura
     public async Task<AsyncVoidMethodBuilder> RegisterAsync(UserRequestDto data)
     {
         // Check if the user already exists by email
-        var user = await _userRepository.FindByEmailAsync(data.Email);
-        if (user != null)
+        var isExist = await _userRepository.ExistsByEmailAsync(data.Email);
+        if (isExist)
         {
             throw new Exception("User already exists");
         }

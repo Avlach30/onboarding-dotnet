@@ -8,11 +8,11 @@ public class Category : BaseModel
 {   
     [Column("name")]
     [MaxLength(100)]
-    public required string Name { get; set; }
+    public string Name { get; set; } = null!;
     
     [Column("description")]
     [MaxLength(255)]
     public string? Description { get; set; }
 
-    public ICollection<Product> Products { get; } = [];
+    public virtual ICollection<Product> Products { get; } = [];
 }
