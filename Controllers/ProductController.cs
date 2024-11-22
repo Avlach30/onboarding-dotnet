@@ -2,21 +2,20 @@ using Microsoft.AspNetCore.Mvc;
 using onboarding_dotnet.Dtos.Index;
 using onboarding_dotnet.Dtos.Products;
 using onboarding_dotnet.Infrastructures.Responses;
-using onboarding_dotnet.Interfaces.Services;
-using onboarding_dotnet.Interfaces.Services.Indexes;
 using onboarding_dotnet.Mappers;
+using onboarding_dotnet.Services;
 
 namespace onboarding_dotnet.Controllers;
 
 [ApiController]
 [Route("products")]
 public class ProductController(
-    IProductService productService,
-    IProductIndexService productIndexService
+    ProductService productService,
+    ProductIndexService productIndexService
 ) : Controller
 {
-    private readonly IProductService _productService = productService;
-    private readonly IProductIndexService _productIndexService = productIndexService;
+    private readonly ProductService _productService = productService;
+    private readonly ProductIndexService _productIndexService = productIndexService;
 
     [HttpGet]
     public async Task<ActionResult<IndexResponse<ProductDto>>> Index(

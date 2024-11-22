@@ -3,18 +3,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using onboarding_dotnet.Dtos.Users;
 using onboarding_dotnet.Infrastructures.Responses;
-using onboarding_dotnet.Interfaces.Repositories;
-using onboarding_dotnet.Interfaces.Services;
 using onboarding_dotnet.Mappers;
-using onboarding_dotnet.Models;
+using onboarding_dotnet.Services;
 
 namespace onboarding_dotnet.Controllers;
 
 [ApiController]
 [Route("users")]
-public class UserController(IUserService userService): Controller
+public class UserController(UserService userService): Controller
 {
-    private readonly IUserService _userService = userService;
+    private readonly UserService _userService = userService;
 
     [HttpGet("profile")]
     [Authorize]
