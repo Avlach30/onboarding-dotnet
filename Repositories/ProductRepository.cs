@@ -14,7 +14,7 @@ public class ProductRepository(ApplicationDBContext context)
 {
     private readonly ApplicationDBContext _context = context;
 
-    public async Task<IndexResponse<ProductDto>> FindAllForIndex(IndexRequestDto request)
+    public async Task<IndexResponse<ProductDto>> FindAllForIndex(IndexProductRequestDto request)
     {
         var datas = _context.Products.Include(product => product.Category).AsSplitQuery().AsQueryable();
 

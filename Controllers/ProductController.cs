@@ -17,7 +17,7 @@ public class ProductController(
 
     [HttpGet]
     public async Task<ActionResult<IndexResponse<ProductDto>>> Index(
-        [FromQuery] IndexRequestDto request
+        [FromQuery] IndexProductRequestDto request
     )
     {
         var result = await _productService.GetAllForIndexPage(request);
