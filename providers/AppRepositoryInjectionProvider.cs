@@ -1,4 +1,3 @@
-using onboarding_dotnet.Interfaces.Repositories;
 using onboarding_dotnet.Repositories;
 
 namespace onboarding_dotnet.Providers
@@ -7,11 +6,11 @@ namespace onboarding_dotnet.Providers
     {
         public void InitRepositoryInjection()
         {
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IProductRepository, ProductRepository>();
-            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-            builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
-            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<UserRepository, UserRepository>();
+            builder.Services.AddScoped<ProductRepository, ProductRepository>();
+            builder.Services.AddScoped<CategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<TransactionRepository, TransactionRepository>();
+            builder.Services.AddScoped<OrderRepository, OrderRepository>();
         }
     }
 }

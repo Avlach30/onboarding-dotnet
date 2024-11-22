@@ -1,11 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using onboarding_dotnet.Infrastuctures.Database;
-using onboarding_dotnet.Interfaces.Repositories;
 using onboarding_dotnet.Models;
 
 namespace onboarding_dotnet.Repositories;
 
-public class TransactionRepository(ApplicationDBContext context): ITransactionRepository
+public class TransactionRepository(ApplicationDBContext context)
 {
     private readonly ApplicationDBContext _context = context;
 
