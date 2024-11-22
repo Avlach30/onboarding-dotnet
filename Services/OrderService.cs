@@ -30,7 +30,7 @@ public class OrderService(
     public async Task<bool> CreateAsync(OrderRequestDto requestDto, int loggedUserId)
     {
         // Begin transaction
-        var dbTransaction = await _context.Database.BeginTransactionAsync();
+        using var dbTransaction = await _context.Database.BeginTransactionAsync();
 
         try
         {   
@@ -41,30 +41,7 @@ public class OrderService(
 
             // Initialize the list of OrderProduct
             List<OrderProduct> orderProducts = [];
-
-            // Iterate through the order products
-            foreach (var orderProduct in requestDto.OrderProducts)
-            {
-                var product = await _productRepository.FindOne(orderProduct.ProductId) ?? throw new Exception("Product not found.");
-
-                totalPrice += product.Price * orderProduct.Quantity;
-
-                // Check if the product stock is enough
-                if (product.Stock < orderProduct.Quantity)
-                {
-                    throw new Exception("Product stock is not enough.");
-                }
-
-                product.Stock -= orderProduct.Quantity;
-                await _productRepository.UpdateAsync(product);
-
-                // Push each order product to orderProducts
-                orderProducts.Add(new OrderProduct
-                {
-                    ProductId = orderProduct.ProductId,
-                    Quantity = orderProduct.Quantity
-                });
-            }
+            List<Product> productsToUpdate = [];
 
             // Create the order
             var order = new Order
@@ -73,20 +50,37 @@ public class OrderService(
                 Status = OrderStatus.Draft,
                 TotalPrice = totalPrice,
             };
-
-            // Add the order to the context
             await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
 
-            // Improve orderProducts
-            orderProducts.ForEach(orderProduct =>
+            // Iterate through the order products
+            foreach (var orderProduct in requestDto.OrderProducts)
             {
-                orderProduct.OrderId = order.Id;
-            });
+                var product = await _productRepository.FindOne(orderProduct.ProductId) ?? throw new Exception("Product not found.");
 
-            // Add the order products to the context
-            await _context.OrderProducts.AddRangeAsync(orderProducts);
-            await _context.SaveChangesAsync();
+                // Check if the product stock is enough
+                if (product.Stock < orderProduct.Quantity)
+                {
+                    throw new Exception("Product stock is not enough.");
+                }
+
+                totalPrice += product.Price * orderProduct.Quantity;
+
+                product.Stock -= orderProduct.Quantity;
+
+                productsToUpdate.Add(product);
+
+                // Push each order product to orderProducts
+                orderProducts.Add(new OrderProduct
+                {
+                    OrderId = order.Id,
+                    ProductId = orderProduct.ProductId,
+                    Quantity = orderProduct.Quantity
+                });
+            }
+
+            // Update the total price of the order
+            order.TotalPrice = totalPrice;
 
             // Create transaction for the payment
             var transaction = new Transaction
@@ -95,12 +89,14 @@ public class OrderService(
                 PaymentMethod = requestDto.PaymentMethod,
                 PaymentStatus = PaymentStatus.Pending
             };
-
-            // Add the transaction to the context
             await _context.Transactions.AddAsync(transaction);
-            await _context.SaveChangesAsync();
+
+            // Add all related entities to the context
+            _context.UpdateRange(productsToUpdate);
+            await _context.OrderProducts.AddRangeAsync(orderProducts);
 
             // Commit the transaction
+            await _context.SaveChangesAsync();
             await dbTransaction.CommitAsync();
 
             // Log the success
