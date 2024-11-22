@@ -24,6 +24,12 @@ public class ProductRepository(ApplicationDBContext context)
             datas = datas.OrderByDescending(product => product.Created_at);
         }
 
+        // Implement search
+        if (!string.IsNullOrEmpty(request.Search))
+        {
+            datas = datas.Where(product => product.Name.Contains(request.Search));
+        }
+
         int totalData = await datas.CountAsync();
 
         // Implement pagination
