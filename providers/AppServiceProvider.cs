@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using onboarding_dotnet.Infrastructures.Mails.Interfaces;
 using onboarding_dotnet.Infrastructures.Mails.Services;
 using onboarding_dotnet.Infrastructures.Policies;
+using onboarding_dotnet.Infrastructures.QueryParam;
 using onboarding_dotnet.Infrastructures.Schedulers;
 using onboarding_dotnet.Infrastuctures.Database;
 using onboarding_dotnet.Utils.Extensions;
@@ -45,12 +46,15 @@ namespace onboarding_dotnet.Providers
                 }
             });
 
-            builder.Services.AddControllers()
-                .AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy();
-                    options.JsonSerializerOptions.DictionaryKeyPolicy = new SnakeCaseNamingPolicy();
-                });
+            builder.Services.AddControllers(options => {
+                // Register the snake_case query model binder
+                options.ModelBinderProviders.Insert(0, new SnakeCaseQueryBinderProvider());
+            })
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy();
+                options.JsonSerializerOptions.DictionaryKeyPolicy = new SnakeCaseNamingPolicy();
+            });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
