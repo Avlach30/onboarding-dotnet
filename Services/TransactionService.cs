@@ -23,7 +23,7 @@ public class TransactionService(
     public async Task<bool> UpdatePaymentStatusToSuccess(int transactionId)
     {
         // Begin transaction
-        var dbTransaction = await _context.Database.BeginTransactionAsync();
+        using var dbTransaction = await _context.Database.BeginTransactionAsync();
 
         try
         {
