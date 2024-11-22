@@ -1,8 +1,10 @@
 using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
+using onboarding_dotnet.Dtos.Index;
 using onboarding_dotnet.Dtos.Orders;
 using onboarding_dotnet.Infrastructures.Mails.Classes;
 using onboarding_dotnet.Infrastructures.Mails.Interfaces;
+using onboarding_dotnet.Infrastructures.Responses;
 using onboarding_dotnet.Infrastuctures.Database;
 using onboarding_dotnet.Models;
 using onboarding_dotnet.Repositories;
@@ -25,6 +27,11 @@ public class OrderService(
     private readonly ILogger<OrderService> _logger = logger;
     private readonly IEmailService _emailService = emailService;
     private readonly UserRepository _userRepository = userRepository;
+
+    public async Task<IndexResponse<OrderDto>> GetAllForIndexPage(IndexRequestDto requestDto)
+    {
+        return await _orderRepository.FindAllForIndex(requestDto);
+    }
 
     public async Task<bool> CreateAsync(OrderRequestDto requestDto, int loggedUserId)
     {

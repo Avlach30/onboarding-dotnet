@@ -13,12 +13,10 @@ namespace onboarding_dotnet.Controllers;
 [ApiController]
 [Route("orders")]
 public class OrderController(
-    OrderService orderService,
-    OrderIndexService orderIndexService
+    OrderService orderService
 ): Controller
 {
     private readonly OrderService _orderService = orderService;
-    private readonly OrderIndexService _orderIndexService = orderIndexService;
 
     [HttpGet]
     [Authorize]
@@ -26,7 +24,7 @@ public class OrderController(
         [FromQuery] IndexRequestDto request
     )
     {
-        var result = await _orderIndexService.Fetch(request);
+        var result = await _orderService.GetAllForIndexPage(request);
 
         return Ok(result);
     }

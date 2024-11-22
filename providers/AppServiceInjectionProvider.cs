@@ -9,7 +9,6 @@ namespace onboarding_dotnet.Providers
             builder.Services.AddScoped<CategoryService, CategoryService>();
             builder.Services.AddScoped<ProductIndexService, ProductIndexService>();
             builder.Services.AddScoped<ProductService, ProductService>();
-            builder.Services.AddScoped<OrderIndexService, OrderIndexService>();
             builder.Services.AddScoped<OrderService, OrderService>();
             builder.Services.AddScoped<TransactionService, TransactionService>();
             builder.Services.AddScoped<UserService, UserService>();
