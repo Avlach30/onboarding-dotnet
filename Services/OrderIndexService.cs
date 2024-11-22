@@ -3,7 +3,6 @@ using onboarding_dotnet.Dtos.Index;
 using onboarding_dotnet.Dtos.Orders;
 using onboarding_dotnet.Infrastructures.Responses;
 using onboarding_dotnet.Infrastuctures.Database;
-using onboarding_dotnet.Interfaces.Services.Indexes;
 using onboarding_dotnet.Mappers;
 using onboarding_dotnet.Utils.Helpers;
 
@@ -11,7 +10,7 @@ namespace onboarding_dotnet.Services;
 
 public class OrderIndexService(
     ApplicationDBContext context
-): IOrderIndexService
+)
 {
     private readonly ApplicationDBContext _context = context;
 
