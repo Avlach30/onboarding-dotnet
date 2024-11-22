@@ -14,7 +14,7 @@ public class CategoryRepository(ApplicationDBContext context)
 {
     private readonly ApplicationDBContext _context = context;
 
-    public async Task<IndexResponse<CategoryDto>> FindAllForIndex(IndexRequestDto request)
+    public async Task<IndexResponse<CategoryDto>> FindAllForIndex(IndexCategoryRequestDto request)
     {
         var datas = _context.Categories.AsQueryable();
 
@@ -22,6 +22,12 @@ public class CategoryRepository(ApplicationDBContext context)
         if (string.IsNullOrEmpty(request.OrderBy))
         {
             datas = datas.OrderByDescending(category => category.Created_at);
+        }
+
+        // Implement search
+        if (!string.IsNullOrEmpty(request.Search))
+        {
+            datas = datas.Where(category => category.Name.Contains(request.Search));
         }
 
         int totalData = await datas.CountAsync();

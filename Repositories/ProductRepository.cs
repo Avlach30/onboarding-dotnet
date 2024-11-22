@@ -14,7 +14,7 @@ public class ProductRepository(ApplicationDBContext context)
 {
     private readonly ApplicationDBContext _context = context;
 
-    public async Task<IndexResponse<ProductDto>> FindAllForIndex(IndexRequestDto request)
+    public async Task<IndexResponse<ProductDto>> FindAllForIndex(IndexProductRequestDto request)
     {
         var datas = _context.Products.Include(product => product.Category).AsSplitQuery().AsQueryable();
 
@@ -22,6 +22,12 @@ public class ProductRepository(ApplicationDBContext context)
         if (string.IsNullOrEmpty(request.OrderBy))
         {
             datas = datas.OrderByDescending(product => product.Created_at);
+        }
+
+        // Implement search
+        if (!string.IsNullOrEmpty(request.Search))
+        {
+            datas = datas.Where(product => product.Name.Contains(request.Search));
         }
 
         int totalData = await datas.CountAsync();

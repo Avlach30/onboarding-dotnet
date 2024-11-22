@@ -17,7 +17,7 @@ public class CategoryController(
 
     [HttpGet]
     public async Task<ActionResult<IndexResponse<CategoryDto>>> Index(
-        [FromQuery] IndexRequestDto request
+        [FromQuery] IndexCategoryRequestDto request
     )
     {
         var result = await _categoryService.GetAllForIndexPage(request);

@@ -12,7 +12,7 @@ public class CategoryService(CategoryRepository categoryRepository)
 {
     private readonly CategoryRepository _categoryRepository = categoryRepository;
 
-    public async Task<IndexResponse<CategoryDto>> GetAllForIndexPage(IndexRequestDto requestDto)
+    public async Task<IndexResponse<CategoryDto>> GetAllForIndexPage(IndexCategoryRequestDto requestDto)
     {
         return await _categoryRepository.FindAllForIndex(requestDto);
     }

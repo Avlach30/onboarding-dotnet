@@ -28,7 +28,7 @@ public class OrderService(
     private readonly IEmailService _emailService = emailService;
     private readonly UserRepository _userRepository = userRepository;
 
-    public async Task<IndexResponse<OrderDto>> GetAllForIndexPage(IndexRequestDto requestDto)
+    public async Task<IndexResponse<OrderDto>> GetAllForIndexPage(IndexOrderRequestDto requestDto)
     {
         return await _orderRepository.FindAllForIndex(requestDto);
     }

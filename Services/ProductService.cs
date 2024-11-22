@@ -12,7 +12,7 @@ public class ProductService(ProductRepository productRepository)
 {
     private readonly ProductRepository _productRepository = productRepository;
 
-    public async Task<IndexResponse<ProductDto>> GetAllForIndexPage(IndexRequestDto request)
+    public async Task<IndexResponse<ProductDto>> GetAllForIndexPage(IndexProductRequestDto request)
     {
         return await _productRepository.FindAllForIndex(request);
     }
