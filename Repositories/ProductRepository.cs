@@ -31,22 +31,18 @@ public class ProductRepository(ApplicationDBContext context)
         return AsyncVoidMethodBuilder.Create();
     }
 
-    public async Task<AsyncVoidMethodBuilder> UpdateAsync(Product data)
+    public async Task<int> UpdateAsync(Product data)
     {
         _context.Products.Update(data);
-        await _context.SaveChangesAsync();
-
-        return AsyncVoidMethodBuilder.Create();
+        return await _context.SaveChangesAsync();
     }
 
-    public Task<bool> Delete(int id)
+    public Task<int> Delete(int id)
     {
-        var data = FindOne(id).Result;
+        Product product = new(){ Id = id };
 
-        _context.Products.Remove(data);
-        _context.SaveChanges();
-
-        return Task.FromResult(true);
+        _context.Products.Remove(product);
+        return _context.SaveChangesAsync();
     }
 
 }
