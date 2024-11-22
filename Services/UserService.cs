@@ -1,12 +1,11 @@
-using onboarding_dotnet.Interfaces.Repositories;
-using onboarding_dotnet.Interfaces.Services;
 using onboarding_dotnet.Models;
+using onboarding_dotnet.Repositories;
 
 namespace onboarding_dotnet.Services;
 
-public class UserService(IUserRepository userRepository): IUserService
+public class UserService(UserRepository userRepository)
 {
-    private readonly IUserRepository _userRepository = userRepository;
+    private readonly UserRepository _userRepository = userRepository;
 
     public async Task<User> GetOneByEmail(string email)
     {

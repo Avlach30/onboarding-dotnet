@@ -1,22 +1,20 @@
-using Microsoft.EntityFrameworkCore;
 using onboarding_dotnet.Infrastructures.Mails.Classes;
 using onboarding_dotnet.Infrastructures.Mails.Interfaces;
 using onboarding_dotnet.Infrastuctures.Database;
-using onboarding_dotnet.Interfaces.Repositories;
-using onboarding_dotnet.Interfaces.Services;
+using onboarding_dotnet.Repositories;
 using onboarding_dotnet.Utils.Enums;
 
 namespace onboarding_dotnet.Services;
 
 public class TransactionService(
     ApplicationDBContext context,
-    ITransactionRepository transactionRepository,
+    TransactionRepository transactionRepository,
     ILogger<TransactionService> logger,
     IEmailService emailService
-): ITransactionService
+)
 {
     private readonly ApplicationDBContext _context = context;
-    private readonly ITransactionRepository _transactionRepository = transactionRepository;
+    private readonly TransactionRepository _transactionRepository = transactionRepository;
     private readonly ILogger<TransactionService> _logger = logger;
     private readonly IEmailService _emailService = emailService;
 

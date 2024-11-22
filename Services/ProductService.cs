@@ -1,19 +1,18 @@
 using System.Runtime.CompilerServices;
 using onboarding_dotnet.Dtos.Products;
-using onboarding_dotnet.Interfaces.Repositories;
-using onboarding_dotnet.Interfaces.Services;
 using onboarding_dotnet.Mappers;
 using onboarding_dotnet.Models;
+using onboarding_dotnet.Repositories;
 
 namespace onboarding_dotnet.Services;
 
 public class ProductService(
-    IProductRepository productRepository,
-    ICategoryRepository categoryRepository
-) : IProductService
+    ProductRepository productRepository,
+    CategoryRepository categoryRepository
+)
 {
-    private readonly IProductRepository _productRepository = productRepository;
-    private readonly ICategoryRepository _categoryRepository = categoryRepository;
+    private readonly ProductRepository _productRepository = productRepository;
+    private readonly CategoryRepository _categoryRepository = categoryRepository;
 
     public async Task<List<Product>> GetAll()
     {

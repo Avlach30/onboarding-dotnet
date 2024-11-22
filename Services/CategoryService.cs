@@ -1,15 +1,14 @@
 using System.Runtime.CompilerServices;
 using onboarding_dotnet.Dtos.Categories;
-using onboarding_dotnet.Interfaces.Repositories;
-using onboarding_dotnet.Interfaces.Services;
 using onboarding_dotnet.Mappers;
 using onboarding_dotnet.Models;
+using onboarding_dotnet.Repositories;
 
 namespace onboarding_dotnet.Services;
 
-public class CategoryService(ICategoryRepository categoryRepository) : ICategoryService
+public class CategoryService(CategoryRepository categoryRepository)
 {
-    private readonly ICategoryRepository _categoryRepository = categoryRepository;
+    private readonly CategoryRepository _categoryRepository = categoryRepository;
 
     public async Task<List<Category>> GetAll()
     {
