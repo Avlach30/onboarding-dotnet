@@ -10,19 +10,17 @@ namespace onboarding_dotnet.Controllers;
 [ApiController]
 [Route("products")]
 public class ProductController(
-    ProductService productService,
-    ProductIndexService productIndexService
+    ProductService productService
 ) : Controller
 {
     private readonly ProductService _productService = productService;
-    private readonly ProductIndexService _productIndexService = productIndexService;
 
     [HttpGet]
     public async Task<ActionResult<IndexResponse<ProductDto>>> Index(
         [FromQuery] IndexRequestDto request
     )
     {
-        var result = await _productIndexService.Fetch(request);
+        var result = await _productService.GetAllForIndexPage(request);
 
         return Ok(result);
     }
