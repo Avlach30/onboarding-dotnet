@@ -15,7 +15,7 @@ public class CategoryIndexService(
 {
     private readonly ApplicationDBContext _context = context;
 
-    public async Task<IndexResponse<CategoryResponseDto>> Fetch(IndexRequestDto request)
+    public async Task<IndexResponse<CategoryDto>> Fetch(IndexRequestDto request)
     {
         var datas = _context.Categories.AsQueryable();
 
@@ -37,8 +37,8 @@ public class CategoryIndexService(
 
         var result = await datas.ToListAsync();
 
-        return IndexResponse<CategoryResponseDto>.Success(
-            result.Select(category => category.ToResponse()).ToList(),
+        return IndexResponse<CategoryDto>.Success(
+            result.Select(category => category.ToDto()).ToList(),
             totalData,
             "Get categories success", 
             request.Page, 

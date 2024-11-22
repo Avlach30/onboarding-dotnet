@@ -23,7 +23,7 @@ public class OrderController(
 
     [HttpGet]
     [Authorize]
-    public async Task<ActionResult<IndexResponse<OrderResponseDto>>> Index(
+    public async Task<ActionResult<IndexResponse<OrderDto>>> Index(
         [FromQuery] IndexRequestDto request
     )
     {
