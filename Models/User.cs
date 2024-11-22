@@ -8,19 +8,19 @@ public class User: BaseModel
 {
     [Column("name")]
     [MaxLength(100)]
-    public required string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     [Column("address")]
     [MaxLength(100)]
-    public required string Address { get; set; }
+    public string Address { get; set; } = null!;
 
     [Column("email")]
     [MaxLength(100)]
-    public required string Email { get; set; }
+    public string Email { get; set; } = null!;
 
     [Column("password")]
     [MaxLength(100)]
-    public required string Password { get; set; }
+    public string Password { get; set; } = null!;
 
-    public ICollection<Order> Orders { get; } = [];
+    public virtual ICollection<Order> Orders { get; } = [];
 }

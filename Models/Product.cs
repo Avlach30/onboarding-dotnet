@@ -8,7 +8,7 @@ public class Product: BaseModel
 {
     [Column("name")]
     [MaxLength(100)]
-    public required string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     
     [Column("price", TypeName = "decimal(12,2)")]
@@ -24,5 +24,6 @@ public class Product: BaseModel
     [Column("category_id")]
     public int CategoryId { get; set; }
 
-    public Category Category { get; set; } = null!;
+    // Relationship
+    public virtual Category Category { get; set; } = null!;
 }

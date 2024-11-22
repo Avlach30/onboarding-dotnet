@@ -14,5 +14,5 @@ public class Transaction: BaseModel
     [Column("order_id")]
     public int OrderId { get; set; }
 
-    public Order Order { get; set; } = null!;
+    public virtual Order Order { get; set; } = null!;
 }
