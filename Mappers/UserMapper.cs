@@ -12,9 +12,7 @@ public static class UserMapper
         {
             Id = user.Id,
             Name = user.Name,
-            Address = user.Address,
             Email = user.Email,
-            Password = user.Password,
             CreatedAt = user.Created_at,
             UpdatedAt = user.Updated_at
         };
