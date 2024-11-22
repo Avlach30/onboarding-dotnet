@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using onboarding_dotnet.Dtos.Index;
 using onboarding_dotnet.Dtos.Orders;
 using onboarding_dotnet.Infrastructures.Responses;
-using onboarding_dotnet.Interfaces.Services;
-using onboarding_dotnet.Interfaces.Services.Indexes;
 using onboarding_dotnet.Mappers;
+using onboarding_dotnet.Services;
 using onboarding_dotnet.Utils.Enums;
 
 namespace onboarding_dotnet.Controllers;
@@ -14,12 +13,12 @@ namespace onboarding_dotnet.Controllers;
 [ApiController]
 [Route("orders")]
 public class OrderController(
-    IOrderService orderService,
-    IOrderIndexService orderIndexService
+    OrderService orderService,
+    OrderIndexService orderIndexService
 ): Controller
 {
-    private readonly IOrderService _orderService = orderService;
-    private readonly IOrderIndexService _orderIndexService = orderIndexService;
+    private readonly OrderService _orderService = orderService;
+    private readonly OrderIndexService _orderIndexService = orderIndexService;
 
     [HttpGet]
     [Authorize]

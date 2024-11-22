@@ -5,16 +5,15 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using onboarding_dotnet.Dtos.Auth;
 using onboarding_dotnet.Dtos.Users;
-using onboarding_dotnet.Interfaces.Repositories;
-using onboarding_dotnet.Interfaces.Services;
 using onboarding_dotnet.Mappers;
 using onboarding_dotnet.Models;
+using onboarding_dotnet.Repositories;
 
 namespace onboarding_dotnet.Services;
 
-public class AuthService(IUserRepository userRepository, IConfiguration configuration): IAuthService
+public class AuthService(UserRepository userRepository, IConfiguration configuration)
 {
-    private readonly IUserRepository _userRepository = userRepository;
+    private readonly UserRepository _userRepository = userRepository;
     private readonly IConfiguration _config = configuration;
 
     public async Task<AsyncVoidMethodBuilder> RegisterAsync(UserRequestDto data)

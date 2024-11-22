@@ -4,28 +4,27 @@ using onboarding_dotnet.Dtos.Orders;
 using onboarding_dotnet.Infrastructures.Mails.Classes;
 using onboarding_dotnet.Infrastructures.Mails.Interfaces;
 using onboarding_dotnet.Infrastuctures.Database;
-using onboarding_dotnet.Interfaces.Repositories;
-using onboarding_dotnet.Interfaces.Services;
 using onboarding_dotnet.Models;
+using onboarding_dotnet.Repositories;
 using onboarding_dotnet.Utils.Enums;
 
 namespace onboarding_dotnet.Services;
 
 public class OrderService(
     ApplicationDBContext context,
-    IProductRepository productRepository,
-    IOrderRepository orderRepository,
+    ProductRepository productRepository,
+    OrderRepository orderRepository,
     ILogger<OrderService> logger,
     IEmailService emailService,
-    IUserRepository userRepository
-): IOrderService
+    UserRepository userRepository
+)
 {
     private readonly ApplicationDBContext _context = context;
-    private readonly IProductRepository _productRepository = productRepository;
-    private readonly IOrderRepository _orderRepository = orderRepository;
+    private readonly ProductRepository _productRepository = productRepository;
+    private readonly OrderRepository _orderRepository = orderRepository;
     private readonly ILogger<OrderService> _logger = logger;
     private readonly IEmailService _emailService = emailService;
-    private readonly IUserRepository _userRepository = userRepository;
+    private readonly UserRepository _userRepository = userRepository;
 
     public async Task<bool> CreateAsync(OrderRequestDto requestDto, int loggedUserId)
     {

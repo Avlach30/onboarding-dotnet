@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using onboarding_dotnet.Infrastructures.Responses;
-using onboarding_dotnet.Interfaces.Services;
+using onboarding_dotnet.Services;
 
 namespace onboarding_dotnet.Controllers;
 
 [ApiController]
 [Route("transactions")]
-public class TransactionController(ITransactionService transactionService) : ControllerBase
+public class TransactionController(TransactionService transactionService) : ControllerBase
 {
-    private readonly ITransactionService _transactionService = transactionService;
+    private readonly TransactionService _transactionService = transactionService;
 
     [HttpPut("{id:int}/success")]
     public async Task<ActionResult<ApiResponse>> UpdatePaymentStatusToSuccess(int id)

@@ -2,21 +2,20 @@ using Microsoft.AspNetCore.Mvc;
 using onboarding_dotnet.Dtos.Categories;
 using onboarding_dotnet.Dtos.Index;
 using onboarding_dotnet.Infrastructures.Responses;
-using onboarding_dotnet.Interfaces.Services;
-using onboarding_dotnet.Interfaces.Services.Indexes;
 using onboarding_dotnet.Mappers;
+using onboarding_dotnet.Services;
 
 namespace onboarding_dotnet.Controllers;
 
 [ApiController]
 [Route("categories")]
 public class CategoryController(
-    ICategoryService categoryService,
-    ICategoryIndexService categoryIndexService
+    CategoryService categoryService,
+    CategoryIndexService categoryIndexService
 ) : Controller
 {
-    private readonly ICategoryService _categoryService = categoryService;
-    private readonly ICategoryIndexService _categoryIndexService = categoryIndexService;
+    private readonly CategoryService _categoryService = categoryService;
+    private readonly CategoryIndexService _categoryIndexService = categoryIndexService;
 
     [HttpGet]
     public async Task<ActionResult<IndexResponse<CategoryDto>>> Index(

@@ -1,12 +1,11 @@
 using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 using onboarding_dotnet.Infrastuctures.Database;
-using onboarding_dotnet.Interfaces.Repositories;
 using onboarding_dotnet.Models;
 
 namespace onboarding_dotnet.Repositories;
 
-public class ProductRepository(ApplicationDBContext context) : IProductRepository
+public class ProductRepository(ApplicationDBContext context)
 {
     private readonly ApplicationDBContext _context = context;
 
