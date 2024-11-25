@@ -2,7 +2,6 @@ using System.Runtime.CompilerServices;
 using onboarding_dotnet.Dtos.Categories;
 using onboarding_dotnet.Dtos.Index;
 using onboarding_dotnet.Infrastructures.Repositories;
-using onboarding_dotnet.Infrastructures.Responses;
 using onboarding_dotnet.Mappers;
 using onboarding_dotnet.Models;
 using onboarding_dotnet.Repositories;
