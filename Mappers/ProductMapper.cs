@@ -11,6 +11,7 @@ public static class ProductMapper
         {
             Id = product.Id,
             CategoryId = product.CategoryId,
+            Poster = product.Poster ?? null,
             Name = product.Name,
             Price = product.Price,
             Stock = product.Stock,
@@ -26,6 +27,7 @@ public static class ProductMapper
         return new ProductResponseDto
         {
             Id = product.Id,
+            Poster = product.Poster ?? null,
             Name = product.Name,
             Price = product.Price,
             Stock = product.Stock,
@@ -44,7 +46,8 @@ public static class ProductMapper
             Name = productDto.Name,
             Price = productDto.Price,
             Stock = productDto.Stock,
-            Description = productDto.Description
+            Description = productDto.Description,
+            Poster = productDto.PosterPath
         };
     }
 }

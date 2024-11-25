@@ -21,4 +21,8 @@ public class ProductRequestDto
 
     [MaxLength(255, ErrorMessage = "Description must be less than 255 characters")]
     public string? Description { get; set; }
+
+    public IFormFile Poster { get; set; } = null!;
+
+    public string? PosterPath { get; set; }
 }

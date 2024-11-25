@@ -74,6 +74,8 @@ namespace onboarding_dotnet.Providers
 
             builder.Services.AddFluentEMail(builder.Configuration);
             builder.Services.AddScoped<IEmailService, EmailService>();
+
+            builder.Services.AddHttpContextAccessor();
         }
     }
 }

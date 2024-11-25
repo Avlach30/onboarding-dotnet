@@ -5,6 +5,8 @@ namespace onboarding_dotnet.Dtos.Products;
 public class ProductResponseDto
 {
     public int Id { get; set; }
+
+    public string? Poster { get; set; }
     
     public required string Name { get; set; }
 

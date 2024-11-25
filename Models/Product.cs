@@ -21,6 +21,9 @@ public class Product: BaseModel
     [MaxLength(255)]
     public string? Description { get; set; }
 
+    [Column("poster", TypeName = "text")]
+    public string? Poster { get; set; }
+
     [Column("category_id")]
     public int CategoryId { get; set; }
 

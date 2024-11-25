@@ -31,6 +31,10 @@ app.UseAuthorization();
 
 app.UseMiddleware<ValidateJsonKeysMiddleware>();
 
+app.UseStaticFiles();
+
+app.UseRouting();
+
 app.MapControllers();
 
 app.Run();
