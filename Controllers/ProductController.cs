@@ -34,7 +34,8 @@ public class ProductController(
     }
 
     [HttpPost]
-    public async Task<ActionResult<ApiResponse>> Store([FromBody] ProductRequestDto productRequestDto)
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult<ApiResponse>> Store([FromForm] ProductRequestDto productRequestDto)
     {
         await _productService.Create(productRequestDto);
 
@@ -42,7 +43,8 @@ public class ProductController(
     }
 
     [HttpPut("{id:int}")]
-    public async Task<ActionResult<ApiResponse>> Update(int id, [FromBody] ProductRequestDto productRequestDto)
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult<ApiResponse>> Update(int id, [FromForm] ProductRequestDto productRequestDto)
     {
         await _productService.Update(id, productRequestDto);
 
