@@ -56,7 +56,7 @@ public class OrderRepository(ApplicationDBContext context)
         );
     }
 
-    public Task<Order> FindOneWithRelations(int id)
+    public Task<Order?> FindOneByIdWithRelations(int id)
     {
         var result = _context.Orders
             .Include(order => order.User)
@@ -64,17 +64,15 @@ public class OrderRepository(ApplicationDBContext context)
             .Include(order => order.OrderProducts)
             .ThenInclude(orderProduct => orderProduct.Product)
             .AsSplitQuery()
-            .FirstOrDefault(order => order.Id == id) 
-            ?? throw new Exception("Order not found");
+            .FirstOrDefault(order => order.Id == id);
 
         return Task.FromResult(result);
     }
 
-    public Task<Order> FindOneWithoutRelations(int id)
+    public Task<Order?> FindOneByIdWithoutRelations(int id)
     {
         var result = _context.Orders
-            .FirstOrDefault(order => order.Id == id) 
-            ?? throw new Exception("Order not found");
+            .FirstOrDefault(order => order.Id == id);
 
         return Task.FromResult(result);
     }

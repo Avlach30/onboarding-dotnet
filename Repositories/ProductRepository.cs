@@ -58,9 +58,20 @@ public class ProductRepository(ApplicationDBContext context)
         return await datas.ToListAsync();
     }
 
-    public Task<Product> FindOne(int id)
+    public Task<Product?> FindOneByIdWithCategory(int id)
     {
-        var result = _context.Products.Include(product => product.Category).AsSplitQuery().FirstOrDefault(product => product.Id == id) ?? throw new Exception("Product not found");
+        var result = _context.Products
+            .Include(product => product.Category)
+            .AsSplitQuery()
+            .FirstOrDefault(product => product.Id == id);
+
+        return Task.FromResult(result);
+    }
+
+    public Task<Product?> FindOneByIdWithoutCategory(int id)
+    {
+        var result = _context.Products
+            .FirstOrDefault(product => product.Id == id);
 
         return Task.FromResult(result);
     }

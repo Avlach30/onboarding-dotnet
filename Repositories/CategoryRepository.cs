@@ -56,9 +56,9 @@ public class CategoryRepository(ApplicationDBContext context)
         return await _context.Categories.OrderByDescending(category => category.Created_at).ToListAsync();
     }
 
-    public Task<Category> FindOne(int id)
+    public Task<Category?> FindOneById(int id)
     {
-        var result = _context.Categories.Find(id) ?? throw new Exception("Category not found");
+        var result = _context.Categories.FirstOrDefault(category => category.Id == id);
 
         return Task.FromResult(result);
     }
