@@ -79,10 +79,8 @@ public class ProductRepository(ApplicationDBContext context)
         return await _context.SaveChangesAsync();
     }
 
-    public Task<int> Delete(int id)
+    public Task<int> Delete(Product product)
     {
-        Product product = new(){ Id = id };
-
         _context.Products.Remove(product);
         return _context.SaveChangesAsync();
     }

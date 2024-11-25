@@ -78,6 +78,13 @@ public class ProductService(
 
     public async Task<int> Delete(int id)
     {
-        return await _productRepository.Delete(id);
+        var existingData = await _productRepository.FindOne(id);
+        if (existingData.Poster != null)
+        {
+            // Delete existing file
+            FileUpload.Delete(existingData.Poster);
+        }
+
+        return await _productRepository.Delete(existingData);
     }
 }
