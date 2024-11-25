@@ -7,6 +7,8 @@ public class ProductDto
 
     public int CategoryId { get; set; }
 
+    public string? Poster { get; set; }
+
     public required string Name { get; set; }
     
     public decimal Price { get; set; }
