@@ -22,7 +22,13 @@ public class ProductController(
     {
         var result = await _productService.GetAllForIndexPage(request);
 
-        return Ok(result);
+        return Ok(IndexResponse<ProductDto>.Success(
+            result.Data.Select(product => product.ToDto()).ToList(),
+            result.Total,
+            "Get products success",
+            request.Page,
+            request.PerPage
+        ));
     }
 
     [HttpGet("{id:int}")]
