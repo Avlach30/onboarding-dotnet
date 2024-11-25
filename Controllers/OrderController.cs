@@ -26,7 +26,13 @@ public class OrderController(
     {
         var result = await _orderService.GetAllForIndexPage(request);
 
-        return Ok(result);
+        return Ok(IndexResponse<OrderDto>.Success(
+            result.Data.Select(order => order.ToDto()).ToList(),
+            result.Total,
+            "Get orders success",
+            request.Page,
+            request.PerPage
+        ));
     }
 
     [HttpPost]
