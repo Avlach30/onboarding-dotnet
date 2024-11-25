@@ -1,10 +1,8 @@
 using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
-using onboarding_dotnet.Dtos.Categories;
 using onboarding_dotnet.Dtos.Index;
-using onboarding_dotnet.Infrastructures.Responses;
+using onboarding_dotnet.Infrastructures.Repositories;
 using onboarding_dotnet.Infrastuctures.Database;
-using onboarding_dotnet.Mappers;
 using onboarding_dotnet.Models;
 using onboarding_dotnet.Utils.Helpers;
 
@@ -14,7 +12,7 @@ public class CategoryRepository(ApplicationDBContext context)
 {
     private readonly ApplicationDBContext _context = context;
 
-    public async Task<IndexResponse<CategoryDto>> FindAllForIndex(IndexCategoryRequestDto request)
+    public async Task<PaginationResult<Category>> FindAllForIndex(IndexCategoryRequestDto request)
     {
         var datas = _context.Categories.AsQueryable();
 
@@ -42,13 +40,11 @@ public class CategoryRepository(ApplicationDBContext context)
 
         var result = await datas.ToListAsync();
 
-        return IndexResponse<CategoryDto>.Success(
-            result.Select(category => category.ToDto()).ToList(),
-            totalData,
-            "Get categories success", 
-            request.Page, 
-            request.PerPage
-        );
+        return new PaginationResult<Category>
+        {
+            Data = result,
+            Total = totalData
+        };
     }
 
     public async Task<List<Category>> FindAll()
@@ -56,9 +52,9 @@ public class CategoryRepository(ApplicationDBContext context)
         return await _context.Categories.OrderByDescending(category => category.Created_at).ToListAsync();
     }
 
-    public Task<Category> FindOne(int id)
+    public Task<Category?> FindOneById(int id)
     {
-        var result = _context.Categories.Find(id) ?? throw new Exception("Category not found");
+        var result = _context.Categories.FirstOrDefault(category => category.Id == id);
 
         return Task.FromResult(result);
     }

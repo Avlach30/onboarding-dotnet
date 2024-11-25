@@ -4,7 +4,7 @@ using onboarding_dotnet.Dtos.Index;
 using onboarding_dotnet.Dtos.Orders;
 using onboarding_dotnet.Infrastructures.Mails.Classes;
 using onboarding_dotnet.Infrastructures.Mails.Interfaces;
-using onboarding_dotnet.Infrastructures.Responses;
+using onboarding_dotnet.Infrastructures.Repositories;
 using onboarding_dotnet.Infrastuctures.Database;
 using onboarding_dotnet.Models;
 using onboarding_dotnet.Repositories;
@@ -28,7 +28,7 @@ public class OrderService(
     private readonly IEmailService _emailService = emailService;
     private readonly UserRepository _userRepository = userRepository;
 
-    public async Task<IndexResponse<OrderDto>> GetAllForIndexPage(IndexOrderRequestDto requestDto)
+    public async Task<PaginationResult<Order>> GetAllForIndexPage(IndexOrderRequestDto requestDto)
     {
         return await _orderRepository.FindAllForIndex(requestDto);
     }
@@ -62,7 +62,7 @@ public class OrderService(
             // Iterate through the order products
             foreach (var orderProduct in requestDto.OrderProducts)
             {
-                var product = await _productRepository.FindOne(orderProduct.ProductId) ?? throw new Exception("Product not found.");
+                var product = await _productRepository.FindOneByIdWithoutCategory(orderProduct.ProductId) ?? throw new Exception("Product not found.");
 
                 // Check if the product stock is enough
                 if (product.Stock < orderProduct.Quantity)
@@ -140,9 +140,9 @@ public class OrderService(
 
     public async Task<Order> GetOne(int id, bool withRelations = false)
     {
-        var data = withRelations ? await _orderRepository.FindOneWithRelations(id) : await _orderRepository.FindOneWithoutRelations(id);
+        var data = withRelations ? await _orderRepository.FindOneByIdWithRelations(id) : await _orderRepository.FindOneByIdWithoutRelations(id);
 
-        return data;
+        return data ?? throw new Exception("Data not found.");
     }
 
     public async Task<AsyncVoidMethodBuilder> UpdateOrderStatus(int orderId, string status)

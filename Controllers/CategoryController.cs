@@ -22,7 +22,13 @@ public class CategoryController(
     {
         var result = await _categoryService.GetAllForIndexPage(request);
 
-        return Ok(result);
+        return Ok(IndexResponse<CategoryDto>.Success(
+            result.Data.Select(category => category.ToDto()).ToList(),
+            result.Total,
+            "Get categories success",
+            request.Page,
+            request.PerPage
+        ));
     }
 
     [HttpGet("{id:int}")]

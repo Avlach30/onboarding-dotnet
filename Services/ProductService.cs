@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using onboarding_dotnet.Dtos.Index;
 using onboarding_dotnet.Dtos.Products;
-using onboarding_dotnet.Infrastructures.Responses;
+using onboarding_dotnet.Infrastructures.Repositories;
 using onboarding_dotnet.Mappers;
 using onboarding_dotnet.Models;
 using onboarding_dotnet.Repositories;
@@ -17,7 +17,7 @@ public class ProductService(
     private readonly ProductRepository _productRepository = productRepository;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-    public async Task<IndexResponse<ProductDto>> GetAllForIndexPage(IndexProductRequestDto request)
+    public async Task<PaginationResult<Product>> GetAllForIndexPage(IndexProductRequestDto request)
     {
         return await _productRepository.FindAllForIndex(request);
     }
@@ -29,7 +29,7 @@ public class ProductService(
 
     public async Task<Product> GetOne(int id)
     {
-        return await _productRepository.FindOne(id);
+        return await _productRepository.FindOneByIdWithCategory(id) ?? throw new Exception("Data not found");
     }
 
     public async Task<AsyncVoidMethodBuilder> Create(ProductRequestDto data)
@@ -53,7 +53,7 @@ public class ProductService(
         FileUpload.Validate(data.Poster, [".jpg", ".jpeg", ".png"], 1 * 1024 * 1024);
 
         // Check if in existing data there is a poster
-        var existingData = await _productRepository.FindOne(id);
+        var existingData = await _productRepository.FindOneByIdWithCategory(id) ?? throw new Exception("Data not found");
         if (existingData.Poster != null)
         {
             // Delete existing file
@@ -78,7 +78,7 @@ public class ProductService(
 
     public async Task<int> Delete(int id)
     {
-        var existingData = await _productRepository.FindOne(id);
+        var existingData = await _productRepository.FindOneByIdWithCategory(id) ?? throw new Exception("Data not found");
         if (existingData.Poster != null)
         {
             // Delete existing file

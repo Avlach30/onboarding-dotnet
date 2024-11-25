@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using onboarding_dotnet.Dtos.Categories;
 using onboarding_dotnet.Dtos.Index;
-using onboarding_dotnet.Infrastructures.Responses;
+using onboarding_dotnet.Infrastructures.Repositories;
 using onboarding_dotnet.Mappers;
 using onboarding_dotnet.Models;
 using onboarding_dotnet.Repositories;
@@ -12,14 +12,14 @@ public class CategoryService(CategoryRepository categoryRepository)
 {
     private readonly CategoryRepository _categoryRepository = categoryRepository;
 
-    public async Task<IndexResponse<CategoryDto>> GetAllForIndexPage(IndexCategoryRequestDto requestDto)
+    public async Task<PaginationResult<Category>> GetAllForIndexPage(IndexCategoryRequestDto requestDto)
     {
         return await _categoryRepository.FindAllForIndex(requestDto);
     }
 
     public async Task<Category> GetOne(int id)
     {
-        return await _categoryRepository.FindOne(id);
+        return await _categoryRepository.FindOneById(id) ?? throw new Exception("Category not found");
     }
 
     public async Task<AsyncVoidMethodBuilder> Create(CategoryRequestDto data)
