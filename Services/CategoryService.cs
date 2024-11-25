@@ -19,7 +19,7 @@ public class CategoryService(CategoryRepository categoryRepository)
 
     public async Task<Category> GetOne(int id)
     {
-        return await _categoryRepository.FindOne(id);
+        return await _categoryRepository.FindOneById(id) ?? throw new Exception("Category not found");
     }
 
     public async Task<AsyncVoidMethodBuilder> Create(CategoryRequestDto data)

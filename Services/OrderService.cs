@@ -62,7 +62,7 @@ public class OrderService(
             // Iterate through the order products
             foreach (var orderProduct in requestDto.OrderProducts)
             {
-                var product = await _productRepository.FindOne(orderProduct.ProductId) ?? throw new Exception("Product not found.");
+                var product = await _productRepository.FindOneByIdWithoutCategory(orderProduct.ProductId) ?? throw new Exception("Product not found.");
 
                 // Check if the product stock is enough
                 if (product.Stock < orderProduct.Quantity)
@@ -140,9 +140,9 @@ public class OrderService(
 
     public async Task<Order> GetOne(int id, bool withRelations = false)
     {
-        var data = withRelations ? await _orderRepository.FindOneWithRelations(id) : await _orderRepository.FindOneWithoutRelations(id);
+        var data = withRelations ? await _orderRepository.FindOneByIdWithRelations(id) : await _orderRepository.FindOneByIdWithoutRelations(id);
 
-        return data;
+        return data ?? throw new Exception("Data not found.");
     }
 
     public async Task<AsyncVoidMethodBuilder> UpdateOrderStatus(int orderId, string status)
